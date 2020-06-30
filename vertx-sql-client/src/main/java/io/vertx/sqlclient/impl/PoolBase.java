@@ -30,7 +30,7 @@ import io.vertx.sqlclient.impl.command.CommandBase;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
-import io.vertx.sqlclient.impl.pool.ConnectionPool;
+import io.vertx.sqlclient.impl.pool.AgroalConnectionPool;
 import io.vertx.sqlclient.impl.tracing.QueryTracer;
 
 /**
@@ -41,14 +41,14 @@ public abstract class PoolBase<P extends Pool> extends SqlClientBase<P> implemen
 
   private final VertxInternal vertx;
   private final ConnectionFactory factory;
-  private final ConnectionPool pool;
+  private final AgroalConnectionPool pool;
   private final CloseFuture closeFuture;
 
   public PoolBase(ContextInternal context, ConnectionFactory factory, QueryTracer tracer, ClientMetrics metrics, PoolOptions poolOptions) {
     super(tracer, metrics);
     this.vertx = context.owner();
     this.factory = factory;
-    this.pool = new ConnectionPool(factory, context, poolOptions.getMaxSize(), poolOptions.getMaxWaitQueueSize());
+    this.pool = new AgroalConnectionPool(factory, context, poolOptions.getMaxSize(), poolOptions.getMaxWaitQueueSize());
     this.closeFuture = new CloseFuture(this);
   }
 
